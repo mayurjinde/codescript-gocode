@@ -1,0 +1,14 @@
+void Patternsearch(char* pat, char* str) {
+    int M = strlen(pat);
+    int N = strlen(str);
+    for (int i = 0; i <= N - M; i++) {
+        int j;
+ 
+        for (j = 0; j < M; j++)
+            if (str[i + j] != pat[j])
+                break;
+ 
+        if (j == M)
+            printf("Pattern found at index %d \n", i);
+    }
+}

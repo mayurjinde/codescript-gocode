@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  ubuntu:
+    image: ubuntu:latest
+    container_name: ubuntu
+    volumes:
+      - ./ubuntu:/home/ubuntu
+    restart: on-failure
+    command: ["sleep","infinity"]
+    ports:
+      - 4555:4555
+  
+  mongodb:
+    image: mongo:3.6.3
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    

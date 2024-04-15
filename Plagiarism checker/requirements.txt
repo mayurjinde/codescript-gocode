@@ -1,0 +1,9 @@
+beautifulsoup4==4.11.1
+detector==3.0
+Flask==2.1.1
+Flask_SocketIO==5.3.6
+google_api_python_client==2.115.0
+openai==0.28.0
+python-dotenv==1.0.1
+Requests==2.31.0
+spacy==3.7.4

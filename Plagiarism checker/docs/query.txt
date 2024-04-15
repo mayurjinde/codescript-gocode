@@ -1,0 +1,81 @@
+import random
+from collections import deque
+
+# Constants for maze dimensions
+WIDTH = 15
+HEIGHT = 10
+
+# Directions for navigating the maze
+directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+def generate_maze(width, height):
+    maze = [['#'] * width for _ in range(height)]
+    stack = [(random.randint(0, height-1), random.randint(0, width-1))]
+
+    while stack:
+        current_cell = stack[-1]
+        maze[current_cell[0]][current_cell[1]] = ' '
+        neighbors = []
+
+        for direction in directions:
+            neighbor = (current_cell[0] + direction[0]*2, current_cell[1] + direction[1]*2)
+            if 0 <= neighbor[0] < height and 0 <= neighbor[1] < width and maze[neighbor[0]][neighbor[1]] == '#':
+                neighbors.append(neighbor)
+
+        if neighbors:
+            chosen_neighbor = random.choice(neighbors)
+            wall = ((chosen_neighbor[0] + current_cell[0]) // 2, (chosen_neighbor[1] + current_cell[1]) // 2)
+            maze[wall[0]][wall[1]] = ' '
+            stack.append(chosen_neighbor)
+        else:
+            stack.pop()
+
+    return maze
+
+def solve_maze(maze):
+    start = (1, 1)
+    end = (HEIGHT-2, WIDTH-2)
+    queue = deque([start])
+    visited = set([start])
+    prev = {}
+
+    while queue:
+        current_cell = queue.popleft()
+        if current_cell == end:
+            break
+
+        for direction in directions:
+            neighbor = (current_cell[0] + direction[0], current_cell[1] + direction[1])
+            if 0 <= neighbor[0] < HEIGHT and 0 <= neighbor[1] < WIDTH and maze[neighbor[0]][neighbor[1]] == ' ' and neighbor not in visited:
+                queue.append(neighbor)
+                visited.add(neighbor)
+                prev[neighbor] = current_cell
+
+    path = []
+    current_cell = end
+    while current_cell != start:
+        path.append(current_cell)
+        current_cell = prev[current_cell]
+    path.append(start)
+    path.reverse()
+
+    return path
+
+def print_maze(maze, path):
+    for row in range(HEIGHT):
+        for col in range(WIDTH):
+            if (row, col) in path:
+                print('*', end=' ')
+            else:
+                print(maze[row][col], end=' ')
+        print()
+
+if __name__ == '__main__':
+    maze = generate_maze(WIDTH, HEIGHT)
+    print("Randomly Generated Maze:")
+    for row in maze:
+        print(''.join(row))
+    print("\nSolving Maze...\n")
+    path = solve_maze(maze)
+    print("Solution Path:")
+    print_maze(maze, path)
